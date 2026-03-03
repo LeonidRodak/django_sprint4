@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load django_bootstrap5 %}
 {% block content %}
   {% if next %}
     {% if user.is_authenticated %}
@@ -23,9 +22,9 @@
       <div class="card-body">
         <form method="post" action="{% url 'login' %}">
           {% csrf_token %}
-          {% bootstrap_form form %}
+          {{ form.as_p }}
           <input type="hidden" name="next" value="{{ next }}">
-          {% bootstrap_button button_type="submit" content="Войти" %}
+          <button type="submit" class="btn btn-primary">Войти</button>
         </form>
         <div>
           <a href="{% url 'password_reset' %}">Забыли пароль?</a>

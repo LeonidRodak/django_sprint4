@@ -3,7 +3,7 @@
     <div class="card-body">
       {% if post.image %}
         <a href="{{ post.image.url }}" target="_blank">
-          <img class="border-3 rounded img-fluid img-thumbnail mb-2 mx-auto d-block" src="{{ post.image.url }}">
+          <img class="border-3 rounded img-fluid img-thumbnail mb-2 mx-auto d-block" src="{{ post.image.url }}" alt="{{ post.title }}">
         </a>
       {% endif %}
       <h5 class="card-title">{{ post.title }}</h5>
@@ -20,6 +20,10 @@
         </small>
       </h6>
       <p class="card-text">{{ post.text|truncatewords:10 }}</p>
+      {#СЧЁТЧИК КОММЕНТАРИЕВ #}
+    <small class="text-muted">
+      {{ post.comment_count|default:0 }}
+    </small>
       <a href="{% url 'blog:post_detail' post.id %}" class="card-link">Читать полный текст</a>
       <a href="{% url 'blog:post_detail' post.id %}" class="card-link text-muted">Комментарии ({{ post.comment_count }})</a>
     </div>

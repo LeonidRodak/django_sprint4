@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load django_bootstrap5 %}
 {% block title %}
   {% if '/edit/' in request.path %}
     Редактирование публикации
@@ -25,7 +24,7 @@
         <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
           {% if not '/delete/' in request.path %}
-            {% bootstrap_form form %}
+          {{ form.as_p }}
           {% else %}
             <article>
               {% if form.instance.image %}
@@ -38,7 +37,7 @@
               <p>{{ form.instance.text|linebreaksbr }}</p>
             </article>
           {% endif %}
-          {% bootstrap_button button_type="submit" content="Отправить" %}
+          <button type="submit" class="btn btn-primary">Отправить</button>
         </form>
       </div>
     </div>

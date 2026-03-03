@@ -9,6 +9,8 @@
     <article class="mb-5">  
       {% include "includes/post_card.html" %}
     </article>   
+  {% empty %}
+    <p>Постов в этой категории пока нет.</p>
   {% endfor %}
   {% include "includes/paginator.html" %}
 {% endblock %}

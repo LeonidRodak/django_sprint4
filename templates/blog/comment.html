@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load django_bootstrap5 %}
 {% block title %}
   {% if '/edit_comment/' in request.path %}
     Редактирование комментария
@@ -25,11 +24,11 @@
             {% endif %}>
             {% csrf_token %}
             {% if not '/delete_comment/' in request.path %}
-              {% bootstrap_form form %}
+            {{ form.as_p }}
             {% else %}
               <p>{{ comment.text }}</p>
             {% endif %}
-            {% bootstrap_button button_type="submit" content="Отправить" %}
+            <button type="submit" class="btn btn-primary">Отправить</button>
           </form>
         </div>
       </div>
