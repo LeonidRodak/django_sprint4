@@ -31,6 +31,7 @@ urlpatterns = [
          views.CommentDeleteView.as_view(), name='delete_comment'),
 ]
 
+# Передает картинки постов в браузере из папки на диске document_root
 if settings.DEBUG:
     urlpatterns += static(
         settings.MEDIA_URL,

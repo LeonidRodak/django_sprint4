@@ -9,6 +9,7 @@ class Category(models.Model):
 
     title = models.CharField(
         max_length=256,
+        # Читаемое название поле в админке, формах, сообщении об ошибках
         verbose_name='Заголовок'
     )
 
@@ -16,6 +17,7 @@ class Category(models.Model):
         verbose_name='Описание'
     )
 
+    # Уникальный slug для URL (blog/category/puteshestviya/)
     slug = models.SlugField(
         unique=True,
         verbose_name='Идентификатор',
@@ -35,17 +37,20 @@ class Category(models.Model):
     )
 
     class Meta:
-        ordering = ['title']
+        ordering = ['title']  # сортировка по полю title
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
 
+    # Определяет, как объект будет выглядеть при выводе
     def __str__(self):
         return self.title
 
+    # Переопределение метода save()
     def save(self, *args, **kwargs):
         if not self.slug:
+            # Если slug пустой, то генерируем автоматически
             self.slug = slugify(self.title)
-        super().save(*args, **kwargs)
+        super().save(*args, **kwargs)  # вызываем стандартный save из родительского класса
 
 
 class Location(models.Model):
@@ -77,11 +82,12 @@ class Location(models.Model):
 
 class Post(models.Model):
 
+    # Поле для хранения изображения
     image = models.ImageField(
         'Изображение',
-        upload_to='posts/',
-        blank=True,
-        null=True)
+        upload_to='posts/',  # путь сохранения media/posts/
+        blank=True,  # можно оставить пустым
+        null=True)  # значение может быть null
 
     title = models.CharField(
         max_length=256,
@@ -93,22 +99,23 @@ class Post(models.Model):
     )
 
     pub_date = models.DateTimeField(
-        auto_now_add=False,
+        auto_now_add=False,  # для создания отложенных постов
         verbose_name='Дата и время публикации',
         help_text='Если установить дату и время в будущем — можно делать\
  отложенные публикации.'
     )
 
+    # Связь многоие к одному (автор)
     author = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='posts',
+        User,  # получаем через get_user_model
+        on_delete=models.CASCADE,  # при удалении пользователя удаляются все его посты
+        related_name='posts',  # можно получить все посты пользователя через user.posts.all()
         verbose_name='Автор публикации'
     )
 
     location = models.ForeignKey(
         Location,
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_NULL,  # если удалят, то будет null (не CASCADE)
         null=True,
         blank=True,
         related_name='posts',
@@ -119,7 +126,7 @@ class Post(models.Model):
         Category,
         on_delete=models.SET_NULL,
         null=True,
-        blank=False,
+        blank=False,  # в формах поле категории обязательно должно быть заполнено, но после удаления может быть null
         related_name='posts',
         verbose_name='Категория'
     )
@@ -144,8 +151,8 @@ class Comment(models.Model):
 
     post = models.ForeignKey(
         Post,
-        on_delete=models.CASCADE,
-        related_name='comments',
+        on_delete=models.CASCADE,  # если удалить пост, то удаляются все комментарии
+        related_name='comments',  # все комментарии связанные с постом
         verbose_name='Публикация'
     )
 
@@ -159,7 +166,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField('Дата и время', auto_now_add=True)
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['created_at']  # новые комментарии снизу
         verbose_name = 'комментарий'
         verbose_name_plural = 'Комментарии'
 
